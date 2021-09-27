@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logo from '../rickandmortylogo.png';
 
 const Body = () => {
   const [characters, setCharacters] = useState([]);
@@ -34,6 +35,11 @@ const Body = () => {
   }
 
   return (
+    <div className="pt-5">
+    <div className="text-center mt-5">
+      <img src={logo} className="img-fluid" />
+    </div>
+    <h2>Click on a character here to add them to your favorites. Choose "Check Favorites" in the menu bar to see your favorites and "Search Characters" to come back.</h2>
       <div className="all">
         <h4>Search by name:</h4>
         <input onChange={readInput} />
@@ -72,6 +78,7 @@ const Body = () => {
         })}
         </div>
       </div>
+    </div>
   );
 };
 

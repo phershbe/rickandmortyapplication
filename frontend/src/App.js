@@ -1,20 +1,23 @@
 import React from 'react';
 import './App.css';
 import Body from './components/body.js';
-import logo from './rickandmortylogo.png';
+import Header from './components/header.js';
+import Register from './components/register.js';
+import Login from './components/login.js';
+import { useSelector, useDispatch } from 'react-redux';
 
-class App extends React.Component {
-  render() {
-    return (
+const App = () => {
+  const currentPage = useSelector(state => state.currentPage);
+  
+  return (
       <>
-      <div className="text-center">
-      <img src={logo} className="img-fluid" />
-      </div>
-      <h2>Click on a character here to add them to your favorites. Choose "Check Favorites" in the menu bar to see your favorites and "Search Characters" to come back.</h2>
-      <Body />
+        <Header />
+        {currentPage === 'homepage' ? <Body /> :
+         currentPage === 'register' ? <Register /> :
+         currentPage === 'login' ? <Login /> :
+        <Body />}
       </>
     );
-  }
 }
 
 export default App;
