@@ -6,8 +6,12 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
 let initialState = {
-  currentPage: 'homepage'
-}
+  currentPage: 'homepage',
+  currentMessage: '',
+  currentUser: '',
+  favoritesList: [],
+  loggedIn: false,
+};
 
 // reducer
 const reducer = (state = initialState, action) => {
@@ -16,6 +20,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         currentPage: 'homepage',
+      };
+    case 'FAVORITES':
+      return {
+        ...state,
+        currentPage: 'favorites',
       };
     case 'REGISTER':
       return {
@@ -26,6 +35,37 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         currentPage: 'login',
+      };
+    case 'USERMESSAGE':
+      return {
+        ...state,
+        currentMessage: action.payload,
+      };
+    case 'USERNOW':
+      return {
+        ...state,
+        currentUser: action.payload,
+      };
+    case 'ADDFAVORITE':
+      return {
+        ...state,
+        favoritesList: [...state.favoritesList, action.payload]
+      };
+    case 'DELETEFAVORITE':
+      return {
+        ...state,
+        favoritesList: state.favoritesList.filter(item => action.payload !== item[0]),
+      };
+    case 'LOGINOUT':
+      console.log(state.loggedIn);
+      return {
+        ...state,
+        loggedIn: !state.loggedIn,
+      };
+    case 'FAVORITESFROMDATABASE':
+      return {
+        ...state,
+        favoritesList: action.payload,
       };
     default:
       return state;
@@ -39,6 +79,12 @@ export const homepage = () => {
   };
 }
 
+export const favorites = () => {
+  return {
+    type: 'FAVORITES'
+  };
+}
+
 export const register = () => {
   return {
     type: 'REGISTER'
@@ -48,6 +94,47 @@ export const register = () => {
 export const login = () => {
   return {
     type: 'LOGIN'
+  };
+}
+
+export const setUserMessage = (username) => {
+  return {
+    type: 'USERMESSAGE',
+    payload: username,
+  };
+}
+
+export const setUser = (username) => {
+  return {
+    type: 'USERNOW',
+    payload: username,
+  };
+}
+
+export const addFavorite = (character) => {
+  return {
+    type: 'ADDFAVORITE',
+    payload: character,
+  };
+}
+
+export const deleteFavorite = (character) => {
+  return {
+    type: 'DELETEFAVORITE',
+    payload: character,
+  };
+}
+
+export const logInOut = () => {
+  return {
+    type: 'LOGINOUT',
+  };
+}
+
+export const favoritesFromDatabase = (array) => {
+  return {
+    type: 'FAVORITESFROMDATABASE',
+    payload: array,
   };
 }
 

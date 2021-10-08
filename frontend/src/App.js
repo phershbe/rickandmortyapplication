@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import Body from './components/body.js';
+import Favorites from './components/favorites.js';
 import Header from './components/header.js';
 import Register from './components/register.js';
 import Login from './components/login.js';
@@ -13,6 +14,7 @@ const App = () => {
       <>
         <Header />
         {currentPage === 'homepage' ? <Body /> :
+         currentPage === 'favorites' ? <Favorites /> :
          currentPage === 'register' ? <Register /> :
          currentPage === 'login' ? <Login /> :
         <Body />}

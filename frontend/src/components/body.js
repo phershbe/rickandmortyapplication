@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import logo from '../rickandmortylogo.png';
+import { useSelector, useDispatch } from 'react-redux';
+import { addFavorite } from '../index.js';
 
 const Body = () => {
   const [characters, setCharacters] = useState([]);
@@ -7,8 +9,14 @@ const Body = () => {
   const [nameInput, setNameInput] = useState('');
   const [locationInput, setLocationInput] = useState('');
   const [loading, setLoading] = useState(true);
+
+  const favorites = useSelector(state => state.favoritesList);
+  const userNow = useSelector(state => state.currentUser);
+  const loggedIn = useSelector(state => state.loggedIn);
+  const dispatch = useDispatch();
   
   useEffect(() => {
+      let isMounted = true;
       let url = 'https://rickandmortyapi.com/api/character/';
       let array = [];
       const getData = async () => {
@@ -20,10 +28,14 @@ const Body = () => {
           }
           url = data.info.next;
         }
-        setCharacters(array);
-        setLoading(false);
-      }
+        if (isMounted) {
+          setCharacters(array);
+          setLoading(false);
+        }}
       getData();
+      return () => {
+        isMounted = false;
+      }
   }, []);
 
   const readInput = (e) => {
@@ -33,6 +45,25 @@ const Body = () => {
   const readLocationInput = (e) => {
       setLocationInput(e.target.value);
   }
+
+  const addData = (a, b, c, d) => {
+    const array = [a, b, c, d];
+    const favoritesCopy = [...favorites];
+    favoritesCopy.push(array);
+    dispatch(addFavorite(array));
+    if (loggedIn === true) {
+      fetch('/addFavorite', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          favoritesCopy,
+          username: userNow,
+        }),
+      });
+    }
+  };
 
   return (
     <div className="pt-5">
@@ -67,7 +98,7 @@ const Body = () => {
         }).map((item, id) => {
           return (
           <>
-              <div className="col-md-4 border border-dark rounded" id="square">
+              <div className="col-md-4 border border-dark rounded" id="square" onClick={() => addData(item.name, item.image, item.location.name, item.status)}>
               <h2>{item.name}</h2>
               <img src={item.image} className="border rounded" />
               <h4>Location: {item.location.name}</h4>
