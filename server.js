@@ -66,6 +66,11 @@ application.post('/deleteFavorite', (request, response) => {
     response.send('Favorites updated');
 });
 
+application.use(express.static('frontend/build'));
+application.get('*', (request, response) => {
+    response.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
+});
+
 application.listen(port, () => {
     console.log('Application listening');
 });
